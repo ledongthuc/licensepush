@@ -34,7 +34,7 @@ func licensePush(sourcePath, content string) error {
 				return errors.New(fmt.Sprintf("%s is not file"))
 			}
 			if supportedConfig, ok := patterns[filepath.Ext(path)]; ok {
-				err := WriteFile(filepath, config, content)
+				err := WriteFile(sourcePath, supportedConfig, content)
 				if err != nil {
 					return err
 				}
@@ -45,7 +45,7 @@ func licensePush(sourcePath, content string) error {
 }
 
 func WriteFile(filePath string, config Config, content string) error {
-	replacement = config.GetReplacement(content)
+	replacement := config.GetReplacement(content)
 	sourceCodeB, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return err

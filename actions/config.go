@@ -43,5 +43,5 @@ func GetCommentPatterns() map[string]Config {
 }
 
 func (c Config) GetReplacement(replacement string) string {
-	return strings.Replace(c.Pattern, "{{content}}", replacement)
+	return strings.Replace(c.Pattern, "{{content}}", replacement, -1)
 }
