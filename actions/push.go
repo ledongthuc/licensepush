@@ -14,7 +14,7 @@ import (
 
 func LicensePushCmd(cmd *cobra.Command, args []string) {
 	sourcePath := "~/.licensepush"
-	if len(args) == 0 {
+	if len(args) > 0 {
 		sourcePath = args[0]
 	}
 	if !viper.IsSet("text") || viper.GetString("text") == "" {
@@ -51,7 +51,7 @@ func WriteFile(filePath string, config Config, content string) error {
 		return err
 	}
 
-	sourceCode := string(sourceCodeb)
+	sourceCode := string(sourceCodeB)
 	if config.AddTop && !strings.HasPrefix(sourceCode, replacement) {
 		sourceCode = fmt.Sprintf("%s\n%s", replacement, sourceCode)
 	}
