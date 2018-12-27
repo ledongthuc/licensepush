@@ -51,7 +51,7 @@ func WriteFile(filePath string, config Config, content string) error {
 		return err
 	}
 
-	sourceCode = string(sourceCode)
+	sourceCode := string(sourceCodeb)
 	if config.AddTop && !strings.HasPrefix(sourceCode, replacement) {
 		sourceCode = fmt.Sprintf("%s\n%s", replacement, sourceCode)
 	}
