@@ -55,7 +55,7 @@ Examples:
   licensepush --config=~/project/source_code/.licensepush.yml
 `,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("--- VERSION %s ---", version)
+		fmt.Printf("--- VERSION %s ---\n", version)
 	},
 	Run: actions.LicensePushCmd,
 }
@@ -71,7 +71,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.Flags().StringVarP(&cfgFile, "config", "c", "~/.licensepush.yml", "config file")
+	rootCmd.Flags().StringVarP(&cfgFile, "config", "c", "~/licensepush.toml", "config file")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -87,7 +87,7 @@ func initConfig() {
 		}
 
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".licensepush.yml")
+		viper.SetConfigName("~/licensepush.toml")
 	}
 
 	viper.AutomaticEnv()

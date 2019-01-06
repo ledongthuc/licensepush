@@ -7,20 +7,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 func LicensePushCmd(cmd *cobra.Command, args []string) {
-	sourcePath := "~/.licensepush"
+	sourcePath := "./"
 	if len(args) > 0 {
 		sourcePath = args[0]
 	}
-	if !viper.IsSet("text") || viper.GetString("text") == "" {
-		fmt.Printf("ERROR: %s miss \"text\" configuration ", sourcePath)
+	if !viper.IsSet("license") || viper.GetString("license") == "" {
+		fmt.Printf("ERROR: %s miss \"license\" configuration\n", sourcePath)
 	}
-	licensePush(sourcePath, viper.GetString("text"))
+	licensePush(sourcePath, viper.GetString("license"))
 }
 
 func licensePush(sourcePath, content string) error {
@@ -31,10 +30,11 @@ func licensePush(sourcePath, content string) error {
 				return err
 			}
 			if info.IsDir() {
-				return errors.New(fmt.Sprintf("%s is not file"))
+				return nil // Next
 			}
+
 			if supportedConfig, ok := patterns[filepath.Ext(path)]; ok {
-				err := WriteFile(sourcePath, supportedConfig, content)
+				err := WriteFile(path, supportedConfig, content)
 				if err != nil {
 					return err
 				}
@@ -56,7 +56,7 @@ func WriteFile(filePath string, config Config, content string) error {
 		sourceCode = fmt.Sprintf("%s\n%s", replacement, sourceCode)
 	}
 	if config.AddBottom && !strings.HasSuffix(sourceCode, replacement) {
-		sourceCode = fmt.Sprintf("%s\n%s", replacement, sourceCode)
+		sourceCode = fmt.Sprintf("%s\n%s", sourceCode, replacement)
 	}
 
 	return ioutil.WriteFile(filePath, []byte(sourceCode), 0644)
