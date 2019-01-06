@@ -18,6 +18,7 @@ func LicensePushCmd(cmd *cobra.Command, args []string) {
 	}
 	if !viper.IsSet("license") || viper.GetString("license") == "" {
 		fmt.Printf("ERROR: %s miss \"license\" configuration\n", sourcePath)
+		return
 	}
 	licensePush(sourcePath, viper.GetString("license"))
 }
