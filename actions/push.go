@@ -16,11 +16,27 @@ func LicensePushCmd(cmd *cobra.Command, args []string) {
 	if len(args) > 0 {
 		sourcePath = args[0]
 	}
-	if !viper.IsSet("license") || viper.GetString("license") == "" {
-		fmt.Printf("ERROR: %s miss \"license\" configuration\n", sourcePath)
+	license, err := getLicenseContent(sourcePath)
+	if err != nil {
+		fmt.Printf("ERROR: can't read license's content: %s \n", err)
 		return
 	}
 	licensePush(sourcePath, viper.GetString("license"))
+}
+
+func getLicenseContent(sourcePath string) (string, error) {
+	if viper.IsSet("license") {
+		if licenseContent := viper.GetString("license"); licenseContent != "" {
+			return licenseContent, nil
+		}
+	}
+
+	localLicense := "./LICENSE"
+	raw, err := ioutil.ReadFile(localLicense)
+	if err != nil {
+		return "", error.Wrap(err, "Read from ./LICENSE")
+	}
+	return string(raw), nil
 }
 
 func licensePush(sourcePath, content string) error {
