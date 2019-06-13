@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -16,12 +17,12 @@ func LicensePushCmd(cmd *cobra.Command, args []string) {
 	if len(args) > 0 {
 		sourcePath = args[0]
 	}
-	license, err := getLicenseContent(sourcePath)
+	licenseContent, err := getLicenseContent(sourcePath)
 	if err != nil {
 		fmt.Printf("ERROR: can't read license's content: %s \n", err)
 		return
 	}
-	licensePush(sourcePath, viper.GetString("license"))
+	licensePush(sourcePath, licenseContent)
 }
 
 func getLicenseContent(sourcePath string) (string, error) {
@@ -34,7 +35,7 @@ func getLicenseContent(sourcePath string) (string, error) {
 	localLicense := "./LICENSE"
 	raw, err := ioutil.ReadFile(localLicense)
 	if err != nil {
-		return "", error.Wrap(err, "Read from ./LICENSE")
+		return "", errors.Wrap(err, "Read from ./LICENSE")
 	}
 	return string(raw), nil
 }
