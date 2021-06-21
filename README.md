@@ -1,4 +1,7 @@
 # licensepush
+
+[![Built with WeBuild](https://raw.githubusercontent.com/webuild-community/badge/master/svg/WeBuild.svg)](https://webuild.community)
+
 It's the tool for pushing license information or any text into your source code
 
 ## Installation
